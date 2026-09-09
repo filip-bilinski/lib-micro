@@ -68,7 +68,7 @@ u64 ms_array_read(u64 array_sel, u64 bank_sel, u64 dword_idx, u64 fast_addr);
  *
  * @return The vaule read from microsequencer.
  */
-u64 static ms_array_0_read(u64 addr) {return ms_array_read(0, 0, 0, addr); }
+static u64 ms_array_0_read(u64 addr) {return ms_array_read(0, 0, 0, addr); }
 
 /**
  * Read a single value from ms_array 1.
@@ -78,7 +78,7 @@ u64 static ms_array_0_read(u64 addr) {return ms_array_read(0, 0, 0, addr); }
  *
  * @return The vaule read from microsequencer.
  */
-u64 static ms_array_1_read(u64 addr) {return ms_array_read(1, 0, 0, addr); }
+static u64 ms_array_1_read(u64 addr) {return ms_array_read(1, 0, 0, addr); }
 
 /**
  * Read a single value from ms_array 2.
@@ -88,7 +88,7 @@ u64 static ms_array_1_read(u64 addr) {return ms_array_read(1, 0, 0, addr); }
  *
  * @return The vaule read from microsequencer.
  */
-u64 static ms_array_2_read(u64 addr) {return ms_array_read(2, 0, 0, addr); }
+static u64 ms_array_2_read(u64 addr) {return ms_array_read(2, 0, 0, addr); }
 
 /**
  * Read a single value from ms_array 3.
@@ -98,7 +98,7 @@ u64 static ms_array_2_read(u64 addr) {return ms_array_read(2, 0, 0, addr); }
  *
  * @return The vaule read from microsequencer.
  */
-u64 static ms_array_3_read(u64 addr) {return ms_array_read(3, 0, 0, addr); }
+static u64 ms_array_3_read(u64 addr) {return ms_array_read(3, 0, 0, addr); }
 
 /**
  * Read a single value from ms_array 4.
@@ -108,7 +108,7 @@ u64 static ms_array_3_read(u64 addr) {return ms_array_read(3, 0, 0, addr); }
  *
  * @return The vaule read from microsequencer.
  */
-u64 static ms_array_4_read(u64 addr) {return ms_array_read(4, 0, 0, addr); }
+static u64 ms_array_4_read(u64 addr) {return ms_array_read(4, 0, 0, addr); }
 
 
 /**
@@ -182,21 +182,21 @@ u64 ms_rw_code_read(u64 addr);
  * @param addr: The address to write to.
  * @param val: microcode instruction to write as a uint64_t.
  */
-void static ms_array_2_write(u64 addr, u64 val) {return ms_array_write(2, 0, 0, addr, val); }
+static void ms_array_2_write(u64 addr, u64 val) {return ms_array_write(2, 0, 0, addr, val); }
 
 /**
  * write a single microcode instruction to ms_array 3.
  * @param addr: The address to write to.
  * @param val: microcode instruction to write as a uint64_t.
  */
-void static ms_array_3_write(u64 addr, u64 val) {return ms_array_write(3, 0, 0, addr, val); }
+static void ms_array_3_write(u64 addr, u64 val) {return ms_array_write(3, 0, 0, addr, val); }
 
 /**
  * write a single microcode instruction to ms_array 4.
  * @param addr: The address to write to.
  * @param val: microcode instruction to write as a uint64_t.
  */
-void static ms_array_4_write(u64 addr, u64 val) {return ms_array_write(4, 0, 0, addr, val); }
+static void ms_array_4_write(u64 addr, u64 val) {return ms_array_write(4, 0, 0, addr, val); }
 
 /**
  * write a single sequence word to the read/write address space.
@@ -241,7 +241,7 @@ void ms_rw_code_write(u64 addr, u64 val);
 #if __GNUC__
 __attribute__((always_inline))
 #endif
-void static inline enable_match_and_patch(void) {
+static inline void enable_match_and_patch(void) {
     u64 mp = crbus_read(0x692);
     crbus_write(0x692, mp & ~1uL);
 }
@@ -253,7 +253,7 @@ void static inline enable_match_and_patch(void) {
 #if __GNUC__
 __attribute__((always_inline))
 #endif
-void static inline disable_match_and_patch(void) {
+static inline void disable_match_and_patch(void) {
     u64 mp = crbus_read(0x692);
     crbus_write(0x692, mp | 1uL);
 }

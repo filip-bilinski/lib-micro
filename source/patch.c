@@ -32,11 +32,14 @@ void patch_ucode(u64 addr, ucode_t ucode_patch[], int n) {
     }
 }
 
+#ifndef KERNEL
+
 void print_patch(u64 addr, ucode_t ucode_patch[], int n) {
     for (int i = 0; i < n; i++) {
         printf("%04lx: %012lx %012lx %012lx %08lx\n", addr+i*4, ucode_patch[i].uop0, ucode_patch[i].uop1, ucode_patch[i].uop2, ucode_patch[i].seqw);
     }
 }
+#endif
 
 void init_match_and_patch(void) {
     #include "ucode/match_and_patch_init.h"
@@ -47,6 +50,7 @@ void init_match_and_patch(void) {
     enable_match_and_patch();
 }
 
+#ifndef KERNEL
 void hook_match_and_patch(u64 entry_idx, u64 ucode_addr, u64 patch_addr) {
     if (ucode_addr % 2 != 0) {
         printf("[-] uop address must be even\n");
@@ -66,6 +70,7 @@ void hook_match_and_patch(u64 entry_idx, u64 ucode_addr, u64 patch_addr) {
     /* if (verbose) */
     /*     printf("hook_match_and_patch: %lx\n", ret); */
 }
+#endif
 
 u64 ldat_array_read(u64 pdat_reg, u64 array_sel, u64 bank_sel, u64 dword_idx, u64 fast_addr) {
     #include "ucode/ldat_read.h"
@@ -75,7 +80,9 @@ u64 ldat_array_read(u64 pdat_reg, u64 array_sel, u64 bank_sel, u64 dword_idx, u6
     return res;
 }
 
+#ifndef KERNEL
 void do_fix_IN_patch() {
     // Patch U58ba to U017a
     hook_match_and_patch(0x1f, 0x58ba, 0x017a);
 }
+#endif

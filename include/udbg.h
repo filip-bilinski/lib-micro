@@ -1,7 +1,11 @@
 #ifndef UDBG_H_
 #define UDBG_H_
 #include "misc.h"
+
+#ifndef KERNEL
 #include <string.h>
+#endif
+
 
 typedef struct {
     u64 value;
@@ -9,7 +13,7 @@ typedef struct {
 } u_result_t;
 
 __attribute__((always_inline))
-u_result_t static inline udbgrd(uint64_t type, uint64_t addr) {
+static inline u_result_t udbgrd(uint64_t type, uint64_t addr) {
     lmfence();
     u_result_t res;
     asm volatile(
@@ -24,7 +28,7 @@ u_result_t static inline udbgrd(uint64_t type, uint64_t addr) {
 }
 
 __attribute__((always_inline))
-u_result_t static inline udbgwr(uint64_t type, uint64_t addr, uint64_t value) {
+static inline u_result_t udbgwr(uint64_t type, uint64_t addr, uint64_t value) {
     uint32_t value_low = (uint32_t)(value & 0xFFFFFFFF);
     uint32_t value_high = (uint32_t)(value >> 32);
     u_result_t res;
@@ -43,7 +47,7 @@ u_result_t static inline udbgwr(uint64_t type, uint64_t addr, uint64_t value) {
 }
 
 __attribute__((always_inline))
-uint64_t static inline ucode_invoke(uint64_t addr) {
+static inline u64 ucode_invoke(uint64_t addr) {
     uint64_t rax = addr, rcx = 0xD8;
     lmfence();
     asm volatile(
@@ -58,7 +62,7 @@ uint64_t static inline ucode_invoke(uint64_t addr) {
 }
 
 __attribute__((always_inline))
-general_purpose_regs static inline generic_ucode_invoke(uint64_t addr) {
+static inline general_purpose_regs generic_ucode_invoke(uint64_t addr) {
     general_purpose_regs regs;
     memset(&regs, 0, sizeof(regs));
     regs.rcx = 0xD8;
@@ -78,7 +82,7 @@ general_purpose_regs static inline generic_ucode_invoke(uint64_t addr) {
 }
 
 __attribute__((always_inline))
-u64 static inline ucode_invoke_2(u64 addr, u64 arg1, u64 arg2) {
+static inline u64 ucode_invoke_2(u64 addr, u64 arg1, u64 arg2) {
     uint64_t rax = addr, rcx = 0xD8;
     lmfence();
     asm volatile(
@@ -95,7 +99,7 @@ u64 static inline ucode_invoke_2(u64 addr, u64 arg1, u64 arg2) {
 }
 
 __attribute__((always_inline))
-u64 static inline ucode_invoke_3(u64 addr, u64 arg1, u64 arg2, u64 arg3) {
+static inline u64 ucode_invoke_3(u64 addr, u64 arg1, u64 arg2, u64 arg3) {
     u64 rax = addr, rcx = 0xD8;
     lmfence();
     asm volatile(
@@ -114,7 +118,7 @@ u64 static inline ucode_invoke_3(u64 addr, u64 arg1, u64 arg2, u64 arg3) {
 
 #define SIMPLERD(name, type) \
 __attribute__((always_inline)) \
-u64 static inline name(u64 addr) { \
+static inline u64 name(u64 addr) { \
     return (u64)udbgrd(type, addr).value; \
 }
 
@@ -131,7 +135,7 @@ SIMPLERD(staging2_read, 0x40)
 
 #define STATUSRD(name, type) \
 __attribute__((always_inline)) \
-u_result_t static inline name(u64 addr) { \
+static inline u_result_t name(u64 addr) { \
  return udbgrd(type, addr); \
 }
 
@@ -141,7 +145,7 @@ STATUSRD(sa_read, 0x08)
 
 #define SIMPLEWR(name, type)     \
 __attribute__((always_inline)) \
-void static inline name(u64 addr, u64 value) { \
+static inline void name(u64 addr, u64 value) { \
     udbgwr(type, addr, value); \
 }
 
@@ -158,7 +162,7 @@ SIMPLEWR(staging2_write, 0x40)
 
 #define RBXWR(name, type) \
 __attribute__((always_inline)) \
-u64 static inline name(u64 addr, u64 value) { \
+static inline u64 name(u64 addr, u64 value) { \
     return (u64)udbgwr(type, addr, value).status; \
 }
 
@@ -168,7 +172,7 @@ RBXWR(sa_write, 0x08)
 
 #define RDXWR(name, type) \
 __attribute__((always_inline)) \
-u64 static inline name(u64 addr, u64 value) { \
+static inline u64 name(u64 addr, u64 value) { \
     return (u64)udbgwr(type, addr, value).value; \
 }
 

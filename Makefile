@@ -35,6 +35,13 @@ $(TARGET_LIB_SHARED): ${TARGET_LIB_STATIC}
 static: ${TARGET_LIB_STATIC}
 dynamic: ${TARGET_LIB_SHARED}
 
+KDIR := /lib/modules/`uname -r`/build
+
+kernel:
+	$(MAKE) -C $(KDIR) M=$(CURDIR)/source MO=$(CURDIR)/source ldat.o patch.o
+	mv $(CURDIR)/source/ldat.o $(CURDIR)/build/kernel-ldat.o
+	mv $(CURDIR)/source/patch.o $(CURDIR)/build/kernel-patch.o
+
 DIRECTORIES = $(wildcard tools/*/)
 
 clean:
