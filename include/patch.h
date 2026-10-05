@@ -10,7 +10,7 @@ void init_match_and_patch(void);
 void hook_match_and_patch(u64 entry_idx, u64 ucode_addr, u64 patch_addr);
 u64 ldat_array_read(u64 pdat_reg, u64 array_sel, u64 bank_sel, u64 dword_idx, u64 fast_addr);
 
-#ifndef KERNEL
+#if !(defined(KERNEL) || defined(GNU_EFI))
 void do_fix_IN_patch();
 #endif
 

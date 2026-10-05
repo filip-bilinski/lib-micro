@@ -42,6 +42,22 @@ kernel:
 	mv $(CURDIR)/source/ldat.o $(CURDIR)/build/kernel-ldat.o
 	mv $(CURDIR)/source/patch.o $(CURDIR)/build/kernel-patch.o
 	mv $(CURDIR)/source/dump.o $(CURDIR)/build/kernel-dump.o
+	touch $(CURDIR)/build/.kernel-dump.o.cmd
+	touch $(CURDIR)/build/.kernel-ldat.o.cmd
+	touch $(CURDIR)/build/.kernel-patch.o.cmd
+
+GNU_EFI_DIR?=../res/gnu-efi
+
+efi:
+	gcc -I$(GNU_EFI_DIR)/inc -I$(CURDIR)/include -fpic -ffreestanding -fno-stack-protector -fno-stack-check -fshort-wchar -mno-red-zone -maccumulate-outgoing-args \
+		-c $(CURDIR)/source/dump.c -o $(CURDIR)/build/efi-dump.o -Wall -DGNU_EFI
+	gcc -I$(GNU_EFI_DIR)/inc -I$(CURDIR)/include -fpic -ffreestanding -fno-stack-protector -fno-stack-check -fshort-wchar -mno-red-zone -maccumulate-outgoing-args \
+		-c $(CURDIR)/source/patch.c -o $(CURDIR)/build/efi-patch.o -Wall -DGNU_EFI
+	gcc -I$(GNU_EFI_DIR)/inc -I$(CURDIR)/include -fpic -ffreestanding -fno-stack-protector -fno-stack-check -fshort-wchar -mno-red-zone -maccumulate-outgoing-args \
+		-c $(CURDIR)/source/ldat.c -o $(CURDIR)/build/efi-ldat.o -Wall -DGNU_EFI
+	ar rcs $(CURDIR)/build/libefi-ldat.a $(CURDIR)/build/efi-ldat.o
+	ar rcs $(CURDIR)/build/libefi-patch.a $(CURDIR)/build/efi-patch.o
+	ar rcs $(CURDIR)/build/libefi-dump.a $(CURDIR)/build/efi-dump.o
 
 DIRECTORIES = $(wildcard tools/*/)
 

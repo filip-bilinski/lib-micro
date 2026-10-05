@@ -2,15 +2,23 @@
 #define MISC_H_
 #define _GNU_SOURCE
 
-#ifndef KERNEL
+#if !(defined(KERNEL) || defined(GNU_EFI))
 #include <stdint.h>
 #include <sched.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <error.h>
+#endif
 
+#if defined(KERNEL)
+#include <linux/module.h>
+#elif defined(GNU_EFI)
+#include <efi.h>
+#include <efilib.h>
+#endif // KERNEL
 
+#ifndef KERNEL
 typedef uint64_t u64;
 typedef uint32_t u32;
 typedef uint16_t u16;
@@ -25,10 +33,8 @@ typedef unsigned __int128 uint128_t;
 
 typedef uint128_t u128;
 typedef int128_t  s128;
-#else
-#include <linux/module.h>
+#endif // !KERNEL
 
-#endif // KERNEL
 
 typedef struct {
     u64 rax;
@@ -52,7 +58,7 @@ typedef struct {
 #define lmfence() asm volatile("lfence\n mfence\n")
 #define wbinvd() asm volatile("wbinvd\n")
 
-#ifndef KERNEL
+#if !(defined(KERNEL) || defined(GNU_EFI))
 __attribute__((always_inline))
 void static inline assign_to_core(int core_id) {
     cpu_set_t cpuset;

@@ -32,7 +32,7 @@ void patch_ucode(u64 addr, ucode_t ucode_patch[], int n) {
     }
 }
 
-#ifndef KERNEL
+#if !(defined(KERNEL) || defined(GNU_EFI))
 
 void print_patch(u64 addr, ucode_t ucode_patch[], int n) {
     for (int i = 0; i < n; i++) {
@@ -50,7 +50,7 @@ void init_match_and_patch(void) {
     enable_match_and_patch();
 }
 
-#ifndef KERNEL
+#if !(defined(KERNEL) || defined(GNU_EFI))
 void hook_match_and_patch(u64 entry_idx, u64 ucode_addr, u64 patch_addr) {
     if (ucode_addr % 2 != 0) {
         printf("[-] uop address must be even\n");
@@ -80,7 +80,7 @@ u64 ldat_array_read(u64 pdat_reg, u64 array_sel, u64 bank_sel, u64 dword_idx, u6
     return res;
 }
 
-#ifndef KERNEL
+#if !(defined(KERNEL) || defined(GNU_EFI))
 void do_fix_IN_patch() {
     // Patch U58ba to U017a
     hook_match_and_patch(0x1f, 0x58ba, 0x017a);
