@@ -13,9 +13,9 @@ void ms_array_dump(u64 array_sel, u64 fast_addr, u64 size) {
         #if !(defined(KERNEL) || defined(GNU_EFI))
             printf("%04lx: %016lx %016lx %016lx %016lx\n", fast_addr, val0, val1, val2, val3);
         #elif defined(KERNEL)
-            printk(KERN_INFO "%04llx: %016llx %016llx %016llx %016llx\n", fast_addr, val0, val1, val2, val3);
+            printk(KERN_INFO "%04llx: %012llx %012llx %012llx %012llx\n", fast_addr, val0, val1, val2, val3);
         #elif defined(GNU_EFI)
-            Print(L"%04llx: %016llx %016llx %016llx %016llx\n", fast_addr, val0, val1, val2, val3);
+            Print(L"%04llx: %012llx %012llx %012llx %012llx\n", fast_addr, val0, val1, val2, val3);
         #endif
     }
 }

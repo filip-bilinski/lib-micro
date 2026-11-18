@@ -50,14 +50,14 @@ void init_match_and_patch(void) {
     enable_match_and_patch();
 }
 
-#if !(defined(KERNEL) || defined(GNU_EFI))
+// #if !(defined(KERNEL) || defined(GNU_EFI))
 void hook_match_and_patch(u64 entry_idx, u64 ucode_addr, u64 patch_addr) {
     if (ucode_addr % 2 != 0) {
-        printf("[-] uop address must be even\n");
+        // printf("[-] uop address must be even\n");
         return;
     }
     if (patch_addr % 2 != 0) {
-        printf("[-] patch uop address must be even\n");
+        // printf("[-] patch uop address must be even\n");
         return;
     }
 
@@ -70,7 +70,7 @@ void hook_match_and_patch(u64 entry_idx, u64 ucode_addr, u64 patch_addr) {
     /* if (verbose) */
     /*     printf("hook_match_and_patch: %lx\n", ret); */
 }
-#endif
+// #endif
 
 u64 ldat_array_read(u64 pdat_reg, u64 array_sel, u64 bank_sel, u64 dword_idx, u64 fast_addr) {
     #include "ucode/ldat_read.h"
